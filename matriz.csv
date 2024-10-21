@@ -1,0 +1,6 @@
+Tipo de cliente, Precio fijo hasta 500 KW/HORA, Precio adicional KW/HORA HASTA 2000, Precio adicional KW/HORA a partir de los 2000, Costo fijo producción KW/Hora
+RESIDENCIAL, $750, $60.5, $150, $3
+COMERCIO, $1500, $70.5, $160, $5
+PYME, $3000, $80, $250, $7
+INDUSTRIA, $7500, $100, $300, $10
+ESTATAL, $3500, $30.5, $100, $6
