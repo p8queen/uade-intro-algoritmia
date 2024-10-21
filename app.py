@@ -25,8 +25,14 @@ def cantidadDiasDelMes(mes, anio):
             return 28
 def generarDatos(mes,anio,cantUsuarios, TIPOS_DE_CLIENTES):
     listaDias = []
+    idUsuarios = [] # nos aseguramos que no se generarán dos veces el mismo id
+    for i in range(1000, 9999+1):
+        idUsuarios.append(i)
+    random.shuffle(idUsuarios)
+    idUsuarios = idUsuarios[:cantUsuarios]
+
     for i in range(0, cantUsuarios):
-        idCliente = random.randint(1000, 9999)
+        idCliente = idUsuarios[i]
         cantDiasMes = cantidadDiasDelMes(mes, anio)
         indexTipoCliente = random.randint(0,len(TIPOS_DE_CLIENTES)-1)
         for dia in range(1, cantDiasMes+1):
