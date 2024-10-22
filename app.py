@@ -64,9 +64,88 @@ def validarOpcionMenu(opcion):
         flag=False
     return flag
 
- # Programa Principal
+# 1 - Totales Mes
+def buscarEnLista(lista, valor):
+    for i in range(0, len(lista)):
+        if lista[i] == valor:
+            return True
+    return False
 
-TIPOS_DE_CLIENTES = ['RESIDENCIAL','COMERCIO','INDUSTRIAL','PYME','ESTATAL']
+def obtenerIdTodosLosClientes(matrizDatos):
+    idClientes = []
+    for fila in matrizDatos:
+        if not buscarEnLista(idClientes, fila[1]):
+            idClientes.append(fila[1])
+    return idClientes
+
+def buscarCliente(idCliente, matrizDatos):
+    for fila in matrizDatos:
+        if fila[1] == idCliente:
+            return fila[2]
+    return None
+
+def cantidadKWConsumidos(idCliente, matrizDatos):
+    cantKWconsumidos = 0
+    for fila in matrizDatos:
+        if fila[1] == idCliente:
+            cantKWconsumidos += fila[3]
+    return cantKWconsumidos
+
+def facturacionCliente(idCliente, matrizDatos, MATRIZ_FACTURACION):
+    cantKWconsumidos = cantidadKWConsumidos(idCliente, matrizDatos)
+    # buscar el tipo de cliente
+    tipoCliente = buscarCliente(idCliente, matrizDatos)
+
+    for fila in MATRIZ_FACTURACION:
+        if fila[0] == tipoCliente:
+            precioFijo = fila[1]
+            precioAdicional1 = fila[2]
+            precioAdicional2 = fila[3]
+    
+    if cantKWconsumidos <= 500:
+        return precioFijo
+    elif cantKWconsumidos <= 2000:
+        return precioFijo + (cantKWconsumidos-500)*precioAdicional1
+    else:
+        return precioFijo + (2000-500)*precioAdicional1 + (cantKWconsumidos-2000)*precioAdicional2
+    
+        
+def totalCostoKWConsumidos(matrizDatos, MATRIZ_FACTURACION):
+    totalCosto = 0
+    for fila in matrizDatos:
+        tipoCliente = fila[2]
+        consumo = fila[3]
+        for filaFacturacion in MATRIZ_FACTURACION:
+            if filaFacturacion[0] == tipoCliente:
+                costo = filaFacturacion[4]*consumo
+                totalCosto += costo
+    return totalCosto
+
+def totalesDelMes(mes, anio, matrizDatos, MATRIZ_FACTURACION):
+    ''' Ejemplo Salida
+        Mes: Agosto 2024
+        Total facturado: $xxxxxx
+        Total Costo KWs consumidos en el mes: xxxxx KW
+        Total KWs consumidos en el mes : xxxxx
+        Promedio de KW consumidos por cliente: xxxxx
+        '''
+    # calcular facturacion por cliente primero y llevarlo a un lista 
+    # luego sumar los valores de la lista para el total facturado
+    listaIdClientes = obtenerIdTodosLosClientes(matrizDatos)
+    totalFacturado = 0
+    for idCliente in listaIdClientes:
+        totalFacturado += facturacionCliente(idCliente, matrizDatos, MATRIZ_FACTURACION)
+        
+    print('Total facturado: $', totalFacturado)
+
+    # total costo KWs consumidos en el mes
+    print('Total Costo KWs consumidos en el mes: $', totalCostoKWConsumidos(matrizDatos, MATRIZ_FACTURACION))
+
+# FIN 1 - Totales Mes
+
+ 
+ 
+ # Programa Principal
 
 print("Bienvenido al programa")
 print()
@@ -77,11 +156,11 @@ También se debe consultar al usuario la cantidad de clientes que tiene la empre
 este mes, mínimo 100 y máximo 300 clientes.
 Estos valores de entrada son los que permiten luego generar la tabla de datos.
 '''
-mes = int(input("Ingrese el mes a consultar: "))
+mes = 2 # int(input("Ingrese el mes a consultar: "))
 while mes<1 or mes>12:
     print("Mes invalido, vuelva a ingresar")
     mes = int(input("Ingrese el mes a consultar: "))
-anio = int(input("Ingrese el año a consultar: "))
+anio = 2023 # int(input("Ingrese el año a consultar: "))
 cantClientes = 100 #int(input("Ingrese la cantidad de clientes a consultar [100,300]: "))
 while cantClientes<100 or cantClientes>300:
     print("Cantidad de clientes invalida, vuelva a ingresar")
@@ -95,9 +174,10 @@ MATRIZ_FACTURACION = [
 ['INDUSTRIA', 7500.0, 100.0, 300.0, 10.0],
 ['ESTATAL', 3500.0, 30.5, 100.0, 6.0] 
 ]
+TIPOS_DE_CLIENTES = ['RESIDENCIAL','COMERCIO','INDUSTRIA','PYME','ESTATAL']
 
 # Generar Datos 
-TIPOS_DE_CLIENTES = ['RESIDENCIAL','COMERCIO','INDUSTRIAL','PYME','ESTATAL']
+
 matrizDatos = generarDatos(mes,anio,cantClientes,TIPOS_DE_CLIENTES)
 print("Datos generados")
 print(matrizDatos[:10])
@@ -119,6 +199,7 @@ while opcion!=6:
     if opcion==1:
         #Instrucciones para la opcion 1
         print("Has elegido la opcion 1")
+        totalesDelMes(mes, anio, matrizDatos, MATRIZ_FACTURACION)
         #ingreso de datos para opcion 1
         #proceso de datos para opcion 1
         #impresion de datos para opcion 1
