@@ -288,9 +288,10 @@ while opcion!=6:
         # impresion de datos para opcion 2
     elif opcion==3:
         print("Has elegido la opcion 3")
-        #ingreso de datos para opcion 3
-        #proceso de datos para opcion 3
-        #impresion de datos para opcion 3
+        # detalle de un cliente en una lista
+        # matriz de datos de cada cliente 
+        # ordenar por total facturacion, insertion sort
+        # mostrar matriz
     elif opcion==4:
         print("Has elegido la opcion 4")
         #ingreso de datos para opcion 4
