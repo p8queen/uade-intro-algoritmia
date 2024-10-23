@@ -121,6 +121,22 @@ def totalCostoKWConsumidos(matrizDatos, MATRIZ_FACTURACION):
                 totalCosto += costo
     return totalCosto
 
+def totalKWsConsumidos(matrizDatos):
+    # la matriz datos trae datos de un mes. 
+    totalKW = 0
+    for fila in matrizDatos:
+        totalKW += fila[3]
+    return totalKW
+
+def cantidadClientes(matrizDatos):
+    idClientes = obtenerIdTodosLosClientes(matrizDatos)
+    return len(idClientes)
+
+def promedioKWConsumidosPorCliente(matrizDatos):
+    cantClientes = cantidadClientes(matrizDatos)
+    totalKW = totalKWsConsumidos(matrizDatos)
+    return totalKW/cantClientes
+
 def totalesDelMes(mes, anio, matrizDatos, MATRIZ_FACTURACION):
     ''' Ejemplo Salida
         Mes: Agosto 2024
@@ -135,11 +151,12 @@ def totalesDelMes(mes, anio, matrizDatos, MATRIZ_FACTURACION):
     totalFacturado = 0
     for idCliente in listaIdClientes:
         totalFacturado += facturacionCliente(idCliente, matrizDatos, MATRIZ_FACTURACION)
-        
+    
+    # Informacion a mostrar    
     print('Total facturado: $', totalFacturado)
-
-    # total costo KWs consumidos en el mes
     print('Total Costo KWs consumidos en el mes: $', totalCostoKWConsumidos(matrizDatos, MATRIZ_FACTURACION))
+    print('Total KWs consumidos en el mes : ', totalKWsConsumidos(matrizDatos))
+    print('Promedio de KW consumidos por cliente: ', promedioKWConsumidosPorCliente(matrizDatos))
 
 # FIN 1 - Totales Mes
 
@@ -180,7 +197,8 @@ TIPOS_DE_CLIENTES = ['RESIDENCIAL','COMERCIO','INDUSTRIA','PYME','ESTATAL']
 
 matrizDatos = generarDatos(mes,anio,cantClientes,TIPOS_DE_CLIENTES)
 print("Datos generados")
-print(matrizDatos[:10])
+for fila in matrizDatos[:10]:
+    print(fila)
 print()    
 #Leer la primera vez la opcion del menu
 imprimirMenu()
