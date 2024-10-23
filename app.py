@@ -212,7 +212,44 @@ def totalTipoDeCliente(mesEnLetras, anio, tipoDeCliente, matrizTipoCliente, MATR
 
 
 # Fin Opcion 2  
- 
+
+# Inicio Opcion 3 - Detalle de Clientes 
+
+def obtenerTipoCliente(idCliente, matrizDatos):
+    for fila in matrizDatos:
+        if fila[1] == idCliente:
+            return fila[2]
+    return None
+
+def detalleCliente(idCliente, matrizDatos, MATRIZ_FACTURACION):
+    tipoCliente = obtenerTipoCliente(idCliente, matrizDatos)
+    cantKWconsumidos = cantidadKWConsumidos(idCliente, matrizDatos)
+    facturacion = facturacionCliente(idCliente, matrizDatos, MATRIZ_FACTURACION)
+    return [idCliente, tipoCliente, cantKWconsumidos, facturacion]
+    
+
+def matrizDetalleClientes(matrizDatos, MATRIZ_FACTURACION):
+    matriz = []
+    idClientes = obtenerIdTodosLosClientes(matrizDatos)
+    for idCliente in idClientes:
+        listaDetalleCliente = detalleCliente(idCliente, matrizDatos, MATRIZ_FACTURACION)
+        matriz.append(listaDetalleCliente)
+    return matriz
+
+def ordenarMatriz(matriz):
+    # ordenar por facturacion, ultima columna 
+    # intercambio de filas
+    n = len(matriz)
+    for i in range(n):
+        for j in range(n-i-1):
+            if matriz[j][3] > matriz[j+1][3]:
+                aux = matriz[j]
+                matriz[j] = matriz[j+1]
+                matriz[j+1] = aux
+    
+
+# Fin Opcion 3
+
  # Programa Principal
 
 print("Bienvenido al programa")
@@ -289,9 +326,21 @@ while opcion!=6:
     elif opcion==3:
         print("Has elegido la opcion 3")
         # detalle de un cliente en una lista
-        # matriz de datos de cada cliente 
-        # ordenar por total facturacion, insertion sort
-        # mostrar matriz
+        # -- idCliente = matrizDatos[0][1]
+        # -- listaDetalleCliente = detalleCliente(idCliente, matrizDatos, MATRIZ_FACTURACION)
+        matriz = matrizDetalleClientes(matrizDatos, MATRIZ_FACTURACION)
+        #print("Matriz de detalle de clientes")
+        #for fila in matriz[:10]:
+        #    print(fila)
+        #print()
+        ordenarMatriz(matriz)
+        print("Matriz ordenada por facturacion")
+        print('icliente, tipoCliente, cantKWconsumidos, facturacion')
+        for fila in matriz[:10]:
+            for dato in fila:
+                print(dato, end=' ')
+            print()
+        
     elif opcion==4:
         print("Has elegido la opcion 4")
         #ingreso de datos para opcion 4
