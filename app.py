@@ -47,7 +47,7 @@ def generarDatos(mes,anio,cantUsuarios, TIPOS_DE_CLIENTES):
 
 def imprimirMenu():
     print()
-    print("********************************************")
+    print("*****  Menu Principal  *********************")
     print("Debe elegir una opcion, solo numeros enteros")
     print("1 - Totales mes")   
     print("2 - Total por tipo de cliente.")
@@ -160,7 +160,58 @@ def totalesDelMes(mes, anio, matrizDatos, MATRIZ_FACTURACION):
 
 # FIN 1 - Totales Mes
 
- 
+# Inicio Opcion 2 - Total por tipo de cliente
+
+def obtenerTiposDeClientes(matrizDatos):
+    listaTiposClientes = []
+    for fila in matrizDatos:
+        # si no está en la lista, lo agrego
+        if not buscarEnLista(listaTiposClientes, fila[2]):
+            listaTiposClientes.append(fila[2])
+    return listaTiposClientes
+
+def seleccionarTipoCliente(matrizDatos):
+    listaTiposClientes = obtenerTiposDeClientes(matrizDatos)
+    print("Seleccione el tipo de cliente a consultar")
+    for i in range(0, len(listaTiposClientes)):
+        print(i+1, listaTiposClientes[i])
+    tipoCliente = int(input("Ingrese el tipo de cliente a consultar: "))
+    while tipoCliente<1 or tipoCliente>len(listaTiposClientes):
+        print("Tipo de cliente invalido, vuelva a ingresar")
+        tipoCliente = int(input("Ingrese el tipo de cliente a consultar: "))
+    return listaTiposClientes[tipoCliente-1]
+
+def obtenerMatrizTipoCliente(tipoCliente, matrizDatos):
+    # es un filtro de la matrizDatos donde me quedo con 
+    # las filas del tipo de cliente seleccionado
+    matrizTipoCliente = []
+    for fila in matrizDatos:
+        if fila[2] == tipoCliente:
+            matrizTipoCliente.append(fila)
+    return matrizTipoCliente
+
+def totalTipoDeCliente(mesEnLetras, anio, tipoDeCliente, matrizTipoCliente, MATRIZ_FACTURACION):
+    print('Mes: ', mesEnLetras, anio)
+    print()
+    print('Tipo de cliente: ', tipoDeCliente)
+    print()
+    # calcular facturacion por cliente primero y llevarlo a un lista 
+    # luego sumar los valores de la lista para el total facturado
+    listaIdClientes = obtenerIdTodosLosClientes(matrizTipoCliente)
+    totalFacturado = 0
+    for idCliente in listaIdClientes:
+        totalFacturado += facturacionCliente(idCliente, matrizTipoCliente, MATRIZ_FACTURACION)
+    
+    # Informacion a mostrar
+    print('Total facturado para el tipo de cliente ', tipoDeCliente, ' es: $', totalFacturado)
+    print()
+    print('Cantidad de clientes: ', len(listaIdClientes))
+    print('Total Costo KWs consumidos en el mes: $', totalCostoKWConsumidos(matrizTipoCliente, MATRIZ_FACTURACION))
+    print('Total KWs consumidos en el mes : ', totalKWsConsumidos(matrizTipoCliente))
+    print('Promedio de KW consumidos por cliente: ', promedioKWConsumidosPorCliente(matrizTipoCliente))
+
+
+# Fin Opcion 2  
  
  # Programa Principal
 
@@ -192,6 +243,7 @@ MATRIZ_FACTURACION = [
 ['ESTATAL', 3500.0, 30.5, 100.0, 6.0] 
 ]
 TIPOS_DE_CLIENTES = ['RESIDENCIAL','COMERCIO','INDUSTRIA','PYME','ESTATAL']
+MESES = ['Enero','Febrero','Marzo','Abril','Mayo','Junio','Julio','Agosto','Septiembre','Octubre','Noviembre','Diciembre']
 
 # Generar Datos 
 
@@ -223,9 +275,17 @@ while opcion!=6:
         #impresion de datos para opcion 1
     elif opcion==2:
         print("Has elegido la opcion 2")
-        #ingreso de datos para opcion 2
-        #proceso de datos para opcion 2
-        #impresion de datos para opcion 2
+        # usuario elegirá el tipo de cliente
+        tipoDeCliente = seleccionarTipoCliente(matrizDatos)
+        print("Tipo de cliente seleccionado: ", tipoDeCliente)
+        # se crea luego la matrizTipoCliente
+        matrizTipoCliente = obtenerMatrizTipoCliente(tipoDeCliente, matrizDatos)
+        print("Muestra matriz tipo cliente")
+        for fila in matrizTipoCliente[:10]:
+            print(fila)
+        mesEnLetras = MESES[mes-1]
+        totalTipoDeCliente(mesEnLetras, anio, tipoDeCliente, matrizTipoCliente, MATRIZ_FACTURACION)
+        # impresion de datos para opcion 2
     elif opcion==3:
         print("Has elegido la opcion 3")
         #ingreso de datos para opcion 3
