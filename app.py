@@ -30,14 +30,16 @@ def generarDatos(mes,anio,cantUsuarios, TIPOS_DE_CLIENTES):
         idUsuarios.append(i)
     random.shuffle(idUsuarios)
     idUsuarios = idUsuarios[:cantUsuarios]
+    indicesTipoCliente = []
+    for usuario in idUsuarios:
+        indicesTipoCliente.append(random.randint(0,len(TIPOS_DE_CLIENTES)-1))
 
     for i in range(0, cantUsuarios):
         idCliente = idUsuarios[i]
         cantDiasMes = cantidadDiasDelMes(mes, anio)
-        indexTipoCliente = random.randint(0,len(TIPOS_DE_CLIENTES)-1)
         for dia in range(1, cantDiasMes+1):
             fecha = str(dia)+"/"+str(mes)+"/"+str(anio)
-            tipoCliente = TIPOS_DE_CLIENTES[indexTipoCliente]
+            tipoCliente = TIPOS_DE_CLIENTES[indicesTipoCliente[i]]
             cantKWconsumidos = random.randint(10, 200)
             listaDias.append([fecha,idCliente,tipoCliente,cantKWconsumidos])
             
@@ -154,7 +156,7 @@ def totalesDelMes(mes, anio, matrizDatos, MATRIZ_FACTURACION):
     
     # Informacion a mostrar    
     print('Total facturado: $', totalFacturado)
-    print('Total Costo KWs consumidos en el mes: $', totalCostoKWConsumidos(matrizDatos, MATRIZ_FACTURACION))
+    print('Total Costo KWs consumidos en el mes: ', totalCostoKWConsumidos(matrizDatos, MATRIZ_FACTURACION))
     print('Total KWs consumidos en el mes : ', totalKWsConsumidos(matrizDatos))
     print('Promedio de KW consumidos por cliente: ', promedioKWConsumidosPorCliente(matrizDatos))
 
