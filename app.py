@@ -250,6 +250,62 @@ def ordenarMatriz(matriz):
 
 # Fin Opcion 3
 
+# Inicio Opcion 4 - Detalle por día 
+
+def datosEnMatrizAgrupada(matrizAgrupada, fecha, tipoCliente):
+    #matrizAgrupada: [fecha, tipoCliente, cantClientes, cantKWconsumidos]
+    for fila in matrizAgrupada:
+        if fila[0] == fecha and fila[1] == tipoCliente:
+            return True
+    return False
+
+def sumarKWConsumidos(matrizAgrupada, fecha, tipoCliente, cantKWconsumidos):
+    #matrizAgrupada: [fecha, tipoCliente, cantClientes, cantKWconsumidos]
+    buscarParaSumar = True
+    i = 0
+    while buscarParaSumar:
+        if matrizAgrupada[i][0] == fecha and matrizAgrupada[i][1] == tipoCliente:
+            matrizAgrupada[i][2] = 0 #contador clientes
+            matrizAgrupada[i][3] += cantKWconsumidos
+            buscarParaSumar = False
+        i += 1
+    
+def contarClientes(matrizDatos, fecha, tipoCliente):
+    #matrizDatos: [fecha, idCliente, tipoCliente, cantKWconsumidos]
+    cantClientes = 0
+    for fila in matrizDatos:
+        if fila[0] == fecha and fila[2] == tipoCliente:
+            cantClientes += 1
+    return cantClientes
+
+def actualizarClientes(matrizAgrupada, matrizDatos):
+    #matrizAgrupada: [fecha, tipoCliente, cantClientes, cantKWconsumidos]
+    #matrizDatos: [fecha, idCliente, tipoCliente, cantKWconsumidos]
+    for fila in matrizAgrupada:
+        fecha = fila[0]
+        tipoCliente = fila[1]
+        cantClientes = contarClientes(matrizDatos, fecha, tipoCliente)
+        fila[2] = cantClientes
+
+def detallePorDia(matrizDatos, MATRIZ_FACTURACION):
+    #matrizAgrupada: [fecha, tipoCliente, cantClientes, cantKWconsumidos]
+    #matrizDatos: [fecha, idCliente, tipoCliente, cantKWconsumidos]
+    matrizAgrupada = []
+    for fila in matrizDatos:
+        fecha = fila[0]
+        idCliente = fila[1]
+        tipoCliente = fila[2]
+        cantKWconsumidos = fila[3]
+        if datosEnMatrizAgrupada(matrizAgrupada, fecha, tipoCliente):
+            # sumar los KW consumidos
+            sumarKWConsumidos(matrizAgrupada, fecha, tipoCliente, cantKWconsumidos) 
+        else:
+            # agregar un nueva fila
+            matrizAgrupada.append([fecha, tipoCliente, 0, cantKWconsumidos])
+    return matrizAgrupada
+    
+# Fin Opcion 4
+
  # Programa Principal
 
 print("Bienvenido al programa")
@@ -343,9 +399,16 @@ while opcion!=6:
         
     elif opcion==4:
         print("Has elegido la opcion 4")
-        #ingreso de datos para opcion 4
-        #proceso de datos para opcion 4
-        #impresion de datos para opcion 4
+        matriz = detallePorDia(matrizDatos, MATRIZ_FACTURACION)
+        for fila in matriz:
+            print(fila)
+        # matriz esta agrupada por fecha y tipo de cliente
+        actualizarClientes(matriz, matrizDatos)
+        print("Matriz actualizada")
+        for fila in matriz:
+            print(fila)
+        # ordenar por fecha
+        
     elif opcion==5:
         print("Has elegido la opcion 5")
         #ingreso de datos para opcion 5
