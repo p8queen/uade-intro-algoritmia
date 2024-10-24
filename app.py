@@ -305,7 +305,48 @@ def detallePorDia(matrizDatos, MATRIZ_FACTURACION):
             # agregar un nueva fila
             matrizAgrupada.append([fecha, tipoCliente, 0, cantKWconsumidos])
     return matrizAgrupada
+
+def facturacionTipoCliente(tipoCliente, kwConsumidos, MATRIZ_FACTURACION):
+    for fila in MATRIZ_FACTURACION:
+        if fila[0] == tipoCliente:
+            precioFijo = fila[1]
+            precioAdicional1 = fila[2]
+            precioAdicional2 = fila[3]
     
+    if kwConsumidos <= 500:
+        return precioFijo
+    elif kwConsumidos <= 2000:
+        return precioFijo + (kwConsumidos-500)*precioAdicional1
+    else:
+        return precioFijo + (2000-500)*precioAdicional1 + (kwConsumidos-2000)*precioAdicional2
+
+def ordenarPorFecha(matriz, dias, mes, anio, TIPOS_DE_CLIENTES, MATRIZ_FACTURACION):
+    # matriz: [fecha, tipoCliente, cantClientes, cantKWconsumidos]
+    # matrizOrdenadaPOrFecha: [fecha, tipoCliente, cantClientes, cantKWconsumidos, totalFacturado]
+    # recorro los dias del mes y busco en la matriz
+    # TIPOS_DE_CLIENTES = ['RESIDENCIAL','COMERCIO','INDUSTRIA','PYME','ESTATAL']
+    
+    matrizOrdenadaPorFecha = []
+    for dia in range(1, dias+1):
+        fecha = str(dia)+"/"+str(mes)+"/"+str(anio)
+        for tipoCliente in TIPOS_DE_CLIENTES:
+            for fila in matriz:
+                if fila[0] == fecha and fila[1] == tipoCliente:
+                    matrizOrdenadaPorFecha.append(fila)
+    
+    # agregar facturacion e imprimir
+    print("Matriz ordenada por fecha")
+    print('fecha, tipoCliente, cantClientes, cantKWconsumidos, totalFacturado')
+    for fila in matrizOrdenadaPorFecha:
+        tipoCliente = fila[1]
+        kwConsumidos = fila[3]
+        totalFacturado = facturacionTipoCliente(tipoCliente, kwConsumidos, MATRIZ_FACTURACION)
+        fila = fila + [totalFacturado]
+        print(fila[0], fila[1], fila[2], fila[3], '$',fila[4])
+    
+   
+            
+
 # Fin Opcion 4
 
  # Programa Principal
@@ -401,15 +442,20 @@ while opcion!=6:
         
     elif opcion==4:
         print("Has elegido la opcion 4")
+        print("Detalle por día")
+        print("Mes: ", MESES[mes-1], anio)
+        print()
         matriz = detallePorDia(matrizDatos, MATRIZ_FACTURACION)
-        for fila in matriz:
-            print(fila)
+        #for fila in matriz:
+        #    print(fila)
         # matriz esta agrupada por fecha y tipo de cliente
         actualizarClientes(matriz, matrizDatos)
-        print("Matriz actualizada")
-        for fila in matriz:
-            print(fila)
+        #print("Matriz actualizada")
+        #for fila in matriz:
+        #    print(fila)
         # ordenar por fecha
+        dias = cantidadDiasDelMes(mes, anio)
+        ordenarPorFecha(matriz, dias, mes, anio, TIPOS_DE_CLIENTES, MATRIZ_FACTURACION)
         
     elif opcion==5:
         print("Has elegido la opcion 5")
