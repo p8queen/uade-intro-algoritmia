@@ -349,7 +349,25 @@ def ordenarPorFecha(matriz, dias, mes, anio, TIPOS_DE_CLIENTES, MATRIZ_FACTURACI
 
 # Fin Opcion 4
 
- # Programa Principal
+# Inicio Opcion 5 - Detalle del día
+
+def detalleDelDia(dia, mes, anio, matrizDatos, MATRIZ_FACTURACION):
+    #matrizDatos: [fecha, idCliente, tipoCliente, cantKWconsumidos]
+    print('idCliente ', 'tipoCliente ', 'cantKWconsumidos ', 'facturacion ')
+    for fila in matrizDatos:
+        if fila[0] == str(dia)+"/"+str(mes)+"/"+str(anio):
+            idCliente = fila[1]
+            tipoCliente = fila[2]
+            cantKWconsumidos = fila[3]
+            facturacion = facturacionTipoCliente(tipoCliente, cantKWconsumidos, MATRIZ_FACTURACION)
+            print(idCliente, tipoCliente, cantKWconsumidos, '$', facturacion)
+    
+
+
+
+
+# Fin opcion 5
+# Programa Principal
 
 print("Bienvenido al programa")
 print()
@@ -459,9 +477,16 @@ while opcion!=6:
         
     elif opcion==5:
         print("Has elegido la opcion 5")
-        #ingreso de datos para opcion 5
-        #proceso de datos para opcion 5
-        #impresion de datos para opcion 5
+        dias = cantidadDiasDelMes(mes, anio)
+        print("Detalle del día")
+        print("Mes: ", MESES[mes-1], "Cantidad de días: ", dias, anio )
+        diaElegido = int(input("Ingrese el dia a consultar: ")) 
+        while diaElegido<1 or diaElegido>dias:
+            print("Dia invalido, vuelva a ingresar")
+            diaElegido = int(input("Ingrese el dia a consultar: "))
+        
+        detalleDelDia(diaElegido, mes, anio, matrizDatos, MATRIZ_FACTURACION)
+
 
     #Luego de procesar la opcion del menu elegida
     #Vuelvo a invocar al menu
