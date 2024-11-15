@@ -410,12 +410,12 @@ También se debe consultar al usuario la cantidad de clientes que tiene la empre
 este mes, mínimo 100 y máximo 300 clientes.
 Estos valores de entrada son los que permiten luego generar la tabla de datos.
 '''
-mes = 2 # int(input("Ingrese el mes a consultar: "))
+mes = int(input("Ingrese el mes a consultar: "))
 while mes<1 or mes>12:
     print("Mes invalido, vuelva a ingresar")
     mes = int(input("Ingrese el mes a consultar: "))
-anio = 2023 # int(input("Ingrese el año a consultar: "))
-cantClientes = 100 #int(input("Ingrese la cantidad de clientes a consultar [100,300]: "))
+anio = int(input("Ingrese el año a consultar: "))
+cantClientes = int(input("Ingrese la cantidad de clientes a consultar [100,300]: "))
 while cantClientes<100 or cantClientes>300:
     print("Cantidad de clientes invalida, vuelva a ingresar")
     cantClientes = int(input("Ingrese la cantidad de clientes a consultar: "))
@@ -438,10 +438,8 @@ print("Datos generados")
 for fila in matrizDatos[:40]:
     print(fila)
 print()    
-#Leer la primera vez la opcion del menu
-#imprimirMenu()
-# opcion = 1 para que entre al while
-#opcion = 1 #int(input("Ingrese la opcion elegida del menu principal: ")) 
+
+
 opcion = 0
 primerIngreso = True
 while opcion!=6:
